@@ -20,7 +20,7 @@
                         link : { text: 'Dashboard', 'url': path('app_dashboard'), 'active': 'dashboard' }
                     } %}
                     {% include 'components/_navbar-link.html.twig' with {
-                        link : { text: 'My orders', 'url': "path('app_order_index')", 'active': 'list' }
+                        link : { text: 'My orders', 'url': path('app_purchase_index'), 'active': 'list' }
                     } %}
 
                     <li class="nav-item dropdown">

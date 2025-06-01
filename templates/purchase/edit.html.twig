@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit order{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: 'Edit order', intro: purchase.store.name } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {{ include('purchase/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('purchase_script') }}
+{% endblock %}

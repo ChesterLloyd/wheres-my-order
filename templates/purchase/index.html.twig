@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Purchase index{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: 'My orders' } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Store</th>
+                        <th>Order date</th>
+                        <th>Amount</th>
+                        <th>Tracking</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for purchase in purchases %}
+                        <tr>
+                            <td>{{ purchase.store.name }}</td>
+                            <td>{{ purchase.orderDate ? purchase.orderDate|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ purchase.amount }} {{ purchase.currency }}</td>
+                            <td>
+                                {% if purchase.trackingCourier %}
+                                    {{ purchase.trackingCourier }}
+                                {% else %}
+                                    No tracking information
+                                {% endif %}
+                            <td>
+                                <a class="btn btn-primary" href="{{ path('app_purchase_show', {'id': purchase.id}) }}">View</a>
+                                {% if purchase.trackingUrl %}
+                                    <a class="btn btn-primary" href="{{ purchase.trackingUrl }}" target="_blank">Track</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No orders found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a class="btn btn-success" href="{{ path('app_purchase_new') }}">Manually add an order</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

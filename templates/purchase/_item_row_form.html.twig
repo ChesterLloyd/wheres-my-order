@@ -1,0 +1,24 @@
+{% macro renderItemRow(itemForm) %}
+    <div class="box">
+        <div class="row">
+            <div class="col-3">
+                {{ form_row(itemForm.name) }}
+            </div>
+            <div class="col-6">
+                {{ form_row(itemForm.description, {'attr': {'rows': 1}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                {{ form_row(itemForm.amount) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(itemForm.currency) }}
+            </div>
+            <div class="col-1 offset-5">
+                <button type="button" class="btn btn-danger order-items__delete mt-2" aria-label="Close">Delete</button>
+            </div>
+        </div>
+        <hr />
+    </div>
+{% endmacro %}

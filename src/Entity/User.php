@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -12,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: 'email', message: 'An account is already registered with this email address.')]
 #[ORM\HasLifecycleCallbacks]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends Audit implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,18 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?User $addedBy = null;
-
-    #[ORM\Column(type: 'datetime')]
-    private ?DateTime $addedAt = null;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?User $updatedBy = null;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTime $updatedAt = null;
 
     public function __construct()
     {
@@ -145,55 +132,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getAddedBy(): ?User
-    {
-        return $this->addedBy;
-    }
-
-    public function setAddedBy(?User $addedBy): self
-    {
-        $this->addedBy = $addedBy;
-
-        return $this;
-    }
-
-    public function getAddedAt(): ?DateTime
-    {
-        return $this->addedAt;
-    }
-
-    #[ORM\PrePersist]
-    public function setAddedAt(): self
-    {
-        $this->addedAt = new DateTime();
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?User
-    {
-        return $this->updatedBy;
-    }
-
-    public function setUpdatedBy(?User $updatedBy): static
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     /**

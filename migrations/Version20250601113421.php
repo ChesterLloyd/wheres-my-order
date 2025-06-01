@@ -14,7 +14,7 @@ final class Version20250601113421 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add user and password reset tables';
     }
 
     public function up(Schema $schema): void
