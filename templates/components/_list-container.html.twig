@@ -1,0 +1,28 @@
+<section class="list-container mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="list-container__title-row{% if not title|default(null) %} list-container__title-row--no-title{% endif %}">
+                    {% if title|default(null) %}<h2>{{ title }}</h2>{% endif %}
+                    {% include 'components/_breadcrumbs.html.twig' %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for item in list %}
+                {# todo: render the item row #}
+            {% else %}
+                <p class="list-container__no-results">No orders to display</p>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            {% if list|length > 0 %}
+                <div class="col-12">
+                    <a class="btn btn-primary" href="{{ show_more_url }}">Show more</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

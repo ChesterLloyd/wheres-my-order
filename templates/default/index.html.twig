@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('home_intro') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_home-intro.html.twig' with {
+        title: 'Track your order in one place.',
+        body: 'This website makes it easy to keep track of all your
+            orders and helps to keep your inbox clear.'
+    } %}
+{% endblock %}

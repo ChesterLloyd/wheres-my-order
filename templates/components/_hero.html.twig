@@ -1,0 +1,21 @@
+<section class="hero {% if colour|default(false) %} text-white{% endif %}"
+         {% if colour|default(false) %}style="background-color: {{ colour }}"{% endif %}
+>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="hero__title">
+                    {% if intro|default(false) %}<span class="hero__intro">{{ intro }}</span>{% endif %}{{ title }}
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% include 'components/_flashes.html.twig' %}
+        </div>
+    </div>
+</div>

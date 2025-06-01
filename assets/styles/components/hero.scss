@@ -1,0 +1,18 @@
+@import '../variables';
+
+.hero {
+    background-color: $orange-light;
+    border-radius: 0 0 1rem 1rem;
+    color: var(--bs-heading-color);
+    margin: 0 0 2rem;
+
+    &__title {
+        margin: 24px 0 32px;
+    }
+
+    &__intro {
+        display: block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+    }
+}

@@ -1,0 +1,8 @@
+<li class="nav-item">
+    <a class="nav-link{% if active|default(null) == link.active %} active{% endif %}"
+       {% if activePage|default(null) == 'home' %}aria-current="page"{% endif %}
+       href="{{ link.url }}"
+    >
+        {{ link.text }}
+    </a>
+</li>

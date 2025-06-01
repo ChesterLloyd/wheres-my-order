@@ -1,0 +1,68 @@
+@import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+
+@import './variables';
+
+.btn {
+    border-radius: 1rem;
+
+    &-success {
+        background-color: $success !important;
+        border-color: $success !important;
+
+        &:hover {
+            background-color: $success-hover !important;
+            border-color: $success-hover !important;
+        }
+    }
+
+    &-warning {
+        background-color: $warning !important;
+        border-color: $warning !important;
+
+        &:hover {
+            background-color: $warning-hover !important;
+            border-color: $warning-hover !important;
+        }
+    }
+
+    &-danger {
+        background-color: $danger !important;
+        border-color: $danger !important;
+
+        &:hover {
+            background-color: $danger-hover !important;
+            border-color: $danger-hover !important;
+        }
+    }
+
+    &--icon {
+        color: $white !important;
+
+        @include media-breakpoint-down(md) {
+            padding: 6px 10px;
+        }
+    }
+
+    &--chocolate {
+        background-color: $chocolate;
+        border-color: $chocolate !important;
+        color: $white !important;
+
+        &:hover {
+            background-color: #7C3941 !important;
+            border-color: #7C3941 !important;
+        }
+    }
+
+    &--white {
+        background-color: $white;
+        border-color: $white !important;
+
+        &:hover {
+            background-color: #DBDBDB !important;
+            border-color: #DBDBDB !important;
+        }
+    }
+}

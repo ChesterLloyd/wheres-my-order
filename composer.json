@@ -41,9 +41,12 @@
         "symfony/ux-turbo": "^2.25",
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",
+        "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "7.3.*",
+        "symfonycasts/reset-password-bundle": "^1.23",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "wildbit/postmark-php": "^6.0"
     },
     "config": {
         "allow-plugins": {
@@ -101,7 +104,7 @@
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
         "symfony/debug-bundle": "7.3.*",
-        "symfony/maker-bundle": "^1.0",
+        "symfony/maker-bundle": "^1.63",
         "symfony/stopwatch": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*"
     }

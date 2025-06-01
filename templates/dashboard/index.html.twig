@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: app.user.name, intro: 'Hello, ' } %}
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="sentry-unmask">Welcome to your dashboard</h1>
+                <p class="lead">Here you can manage your invoices, reports, and more.</p>
+            </div>
+        </div>
+    </div>
+
+    {% include 'components/_list-container.html.twig' with {
+        title: 'Ongoing orders', list: ongoingOrders, show_more_url: path('app_dashboard'),
+    } %}
+
+    {% include 'components/_list-container.html.twig' with {
+        title: 'Previous orders', list: previousOrders, show_more_url: path('app_dashboard'),
+    } %}
+{% endblock %}

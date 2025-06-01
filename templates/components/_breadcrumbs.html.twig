@@ -1,0 +1,35 @@
+{% if breadcrumbs is defined %}
+    <div class="list-container__title-row-breadcrumbs">
+        <nav class="list-container__title-row-breadcrumbs-nav list-container__title-row-breadcrumbs-nav--desktop" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">            
+            <ol class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li class="breadcrumb-item {% if loop.last %}active{% endif %}" {% if loop.last %}aria-current="page"{% endif %}>
+                        {% if not loop.last and breadcrumb.url %}
+                            <a href="{{ breadcrumb.url }}">
+                        {% endif %}
+                        <span class="badge rounded-pill fs-6 {% if loop.last %}text-bg-secondary{% else %}text-bg-primary{% endif %}">
+                            {{ breadcrumb.page|length > 15 ? breadcrumb.page|slice(0, 15) ~ '…' : breadcrumb.page }}
+                        </span>
+                        {% if not loop.last and breadcrumb.url %}
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+
+        <nav class="list-container__title-row-breadcrumbs-nav list-container__title-row-breadcrumbs-nav--mobile" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% for breadcrumb in breadcrumbs|reverse|slice(1, 2)|reverse %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ breadcrumb.url }}">
+                            <span class="badge rounded-pill fs-6 text-bg-primary">
+                                {{ breadcrumb.page|length > 5 ? breadcrumb.page|slice(0, 5) ~ '…' : breadcrumb.page }}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+{% endif %}

@@ -1,0 +1,31 @@
+services:
+    site:
+        container_name: wheresmyorder-site
+        platform: linux/amd64
+        build:
+            args:
+                ENV: local
+            context: .
+            dockerfile: docker/Dockerfile
+        ports:
+            - "80:8080"
+        volumes:
+            - ./:/var/www/html
+
+    mariadb:
+        container_name: wheresmyorder-db
+        image: mariadb:11.4
+        environment:
+            TZ: "Europe/London"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+            MYSQL_ROOT_PASSWORD: "appleseed"
+            MYSQL_USER: 'wheresmyorder'
+            MYSQL_PASSWORD: 'appleseed'
+            MYSQL_DATABASE: 'wheresmyorder'
+        ports:
+            - "3306:3306"
+        volumes:
+            - wheresmyorder-db-volume:/var/lib/mysql
+
+volumes:
+    wheresmyorder-db-volume:

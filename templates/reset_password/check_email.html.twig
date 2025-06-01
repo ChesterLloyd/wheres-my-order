@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password reset email sent{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: 'Password reset email sent' } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <p>
+                    If an account matching your email exists, then an email was just sent that contains a link that
+                    you can use to reset your password. This link will expire in
+                    {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                </p>
+                <p>
+                    If you don't receive an email please check your spam folder or
+                    <a href="{{ path('reset_password_request') }}">try again</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+**/*.dockerignore
+**/*.git
+**/.gitignore
+.env*
+.github
+.idea
+.vscode
+bin/*
+!bin/console
+docker-compose*
+node_modules
+var
+vendor
+README.md
