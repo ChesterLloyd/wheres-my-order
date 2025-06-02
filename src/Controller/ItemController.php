@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/item')]
 final class ItemController extends AbstractController
 {
+    const ACTIVE_PAGE = 'purchase';
+
     #[Route('/{id}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
@@ -26,6 +28,7 @@ final class ItemController extends AbstractController
         }
 
         return $this->render('item/edit.html.twig', [
+            'active' => self::ACTIVE_PAGE,
             'item' => $item,
             'form' => $form,
         ]);

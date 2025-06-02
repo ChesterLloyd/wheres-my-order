@@ -14,10 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/order')]
 final class PurchaseController extends AbstractController
 {
+    const ACTIVE_PAGE = 'purchase';
+
     #[Route(name: 'app_purchase_index', methods: ['GET'])]
     public function index(PurchaseRepository $purchaseRepository): Response
     {
         return $this->render('purchase/index.html.twig', [
+            'active' => self::ACTIVE_PAGE,
             'purchases' => $purchaseRepository->findAll(),
         ]);
     }
@@ -37,6 +40,7 @@ final class PurchaseController extends AbstractController
         }
 
         return $this->render('purchase/new.html.twig', [
+            'active' => self::ACTIVE_PAGE,
             'purchase' => $purchase,
             'form' => $form,
             'new' => true,
@@ -47,6 +51,7 @@ final class PurchaseController extends AbstractController
     public function show(Purchase $purchase): Response
     {
         return $this->render('purchase/show.html.twig', [
+            'active' => self::ACTIVE_PAGE,
             'purchase' => $purchase,
         ]);
     }
@@ -64,6 +69,7 @@ final class PurchaseController extends AbstractController
         }
 
         return $this->render('purchase/edit.html.twig', [
+            'active' => self::ACTIVE_PAGE,
             'purchase' => $purchase,
             'form' => $form,
             'new' => false,

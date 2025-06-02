@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Security\LoginFormAuthenticator;
+use App\Service\InboundMailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -39,6 +40,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setInboundEmail(InboundMailerService::generateInboundEmailAddress());
             $entityManager->persist($user);
             $entityManager->flush();
 

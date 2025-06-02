@@ -20,7 +20,10 @@
                         link : { text: 'Dashboard', 'url': path('app_dashboard'), 'active': 'dashboard' }
                     } %}
                     {% include 'components/_navbar-link.html.twig' with {
-                        link : { text: 'My orders', 'url': path('app_purchase_index'), 'active': 'list' }
+                        link : { text: 'My orders', 'url': path('app_purchase_index'), 'active': 'purchase' }
+                    } %}
+                    {% include 'components/_navbar-link.html.twig' with {
+                        link : { text: 'My emails', 'url': path('app_inbound_email_index'), 'active': 'inbound_email' }
                     } %}
 
                     <li class="nav-item dropdown">

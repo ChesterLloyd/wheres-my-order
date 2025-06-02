@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emails{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: 'My emails' } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Sender</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for email in inbound_emails %}
+                        <tr>
+                            <td>{{ email.dateReceived ? email.dateReceived|date('d-m-Y H:i:s') : '' }}</td>
+                            <td>{{ email.subject }}</td>
+                            <td>{{ email.sender }}</td>
+                            <td>
+                                <a class="btn btn-primary" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No emails received</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <p><b>Your unique email address</b>: {{ app.user.inboundEmail }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

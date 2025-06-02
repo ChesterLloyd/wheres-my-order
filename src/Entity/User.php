@@ -27,6 +27,9 @@ class User extends Audit implements UserInterface, PasswordAuthenticatedUserInte
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $inbound_email = null;
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -89,6 +92,18 @@ class User extends Audit implements UserInterface, PasswordAuthenticatedUserInte
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function getInboundEmail(): ?string
+    {
+        return $this->inbound_email;
+    }
+
+    public function setInboundEmail(string $inbound_email): static
+    {
+        $this->inbound_email = $inbound_email;
+
+        return $this;
     }
 
     /**
