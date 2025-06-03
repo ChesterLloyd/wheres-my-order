@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'purchase')]
 class Purchase extends Audit
 {
+    const STATUS_ACKNOWLEDGED = 'ACKNOWLEDGED';
+    const STATUS_CANCELLED = 'CANCELLED';
+    const STATUS_DELIVERED = 'DELIVERED';
+    const STATUS_DISPATCHED = 'DISPATCHED';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,6 +27,9 @@ class Purchase extends Audit
     #[ORM\JoinColumn(nullable: false)]
     private ?Store $store = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $orderId = null;
+
     #[ORM\Column]
     private ?DateTime $order_date = null;
 
@@ -30,6 +38,9 @@ class Purchase extends Audit
 
     #[ORM\Column(length: 3)]
     private ?string $currency = null;
+
+    #[ORM\Column(length: 12)]
+    private ?string $status = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tracking_courier = null;
@@ -61,6 +72,18 @@ class Purchase extends Audit
     public function setStore(?Store $store): static
     {
         $this->store = $store;
+
+        return $this;
+    }
+
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(string $orderId): static
+    {
+        $this->orderId = $orderId;
 
         return $this;
     }
@@ -97,6 +120,18 @@ class Purchase extends Audit
     public function setCurrency(string $currency): static
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

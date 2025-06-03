@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Purchase;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -22,11 +23,26 @@ class PurchaseForm extends AbstractType
                 'label' => false,
             ])
 
+            ->add('order_id', TextType::class, [
+                'required' => true,
+                'label' => 'Order Number',
+            ])
             ->add('order_date', DateTimeType::class, [
                 'required' => true,
                 'label' => 'Order Date',
                 'html5' => true,
                 'widget' => 'single_text',
+            ])
+            ->add('status', ChoiceType::class, [
+                'required' => true,
+                'choices' => [
+                    'Acknowledged' => Purchase::STATUS_ACKNOWLEDGED,
+                    'Dispatched' => Purchase::STATUS_DISPATCHED,
+                    'Delivered' => Purchase::STATUS_DELIVERED,
+                    'Cancelled' => Purchase::STATUS_CANCELLED,
+                ],
+                'expanded' => false,
+                'multiple' => false,
             ])
             ->add('amount', MoneyType::class, [
                 'required' => true,

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Item;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,11 +30,18 @@ class ItemForm extends AbstractType
             ->add('amount', MoneyType::class, [
                 'required' => true,
                 'currency' => $options['currency'] ?: $options['data']?->getCurrency(),
+                'label' => 'Amount (per item)',
             ])
             ->add('currency', CurrencyType::class, [
                 'required' => true,
                 'placeholder' => 'Select a currency',
                 'preferred_choices' => ['GBP', 'EUR', 'USD'],
+            ])
+            ->add('quantity', IntegerType::class, [
+                'attr' => [
+                    'min' => 1,
+                ],
+                'required' => true,
             ])
         ;
     }

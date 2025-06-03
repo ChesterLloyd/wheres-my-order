@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'components/_hero.html.twig' with { title: 'Edit order', intro: purchase.store.name } %}
+    {% include 'components/_hero.html.twig' with { title: 'Edit order', intro: purchase.store.name ~ ' #' ~ purchase.orderId } %}
 
     <div class="container">
         <div class="row">
