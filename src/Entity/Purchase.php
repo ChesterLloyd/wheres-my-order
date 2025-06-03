@@ -17,6 +17,7 @@ class Purchase extends Audit
     const STATUS_CANCELLED = 'CANCELLED';
     const STATUS_DELIVERED = 'DELIVERED';
     const STATUS_DISPATCHED = 'DISPATCHED';
+    const STATUS_OUT_FOR_DELIVERY = 'OUT FOR DELIVERY';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,7 +32,7 @@ class Purchase extends Audit
     private ?string $orderId = null;
 
     #[ORM\Column]
-    private ?DateTime $order_date = null;
+    private ?DateTime $orderDate = null;
 
     #[ORM\Column]
     private ?float $amount = null;
@@ -43,10 +44,10 @@ class Purchase extends Audit
     private ?string $status = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $tracking_courier = null;
+    private ?string $trackingCourier = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $tracking_url = null;
+    private ?string $trackingUrl = null;
 
     /**
      * @var Collection<int, Item>
@@ -54,9 +55,16 @@ class Purchase extends Audit
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'purchase', cascade: ['persist'], orphanRemoval: true)]
     private Collection $items;
 
+    /**
+     * @var Collection<int, InboundEmail>
+     */
+    #[ORM\OneToMany(targetEntity: InboundEmail::class, mappedBy: 'purchase', cascade: ['persist'])]
+    private Collection $inboundEmails;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->inboundEmails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,12 +98,12 @@ class Purchase extends Audit
 
     public function getOrderDate(): ?DateTime
     {
-        return $this->order_date;
+        return $this->orderDate;
     }
 
-    public function setOrderDate(DateTime $order_date): static
+    public function setOrderDate(DateTime $orderDate): static
     {
-        $this->order_date = $order_date;
+        $this->orderDate = $orderDate;
 
         return $this;
     }
@@ -138,24 +146,24 @@ class Purchase extends Audit
 
     public function getTrackingCourier(): ?string
     {
-        return $this->tracking_courier;
+        return $this->trackingCourier;
     }
 
-    public function setTrackingCourier(?string $tracking_courier): static
+    public function setTrackingCourier(?string $trackingCourier): static
     {
-        $this->tracking_courier = $tracking_courier;
+        $this->trackingCourier = $trackingCourier;
 
         return $this;
     }
 
     public function getTrackingUrl(): ?string
     {
-        return $this->tracking_url;
+        return $this->trackingUrl;
     }
 
-    public function setTrackingUrl(?string $tracking_url): static
+    public function setTrackingUrl(?string $trackingUrl): static
     {
-        $this->tracking_url = $tracking_url;
+        $this->trackingUrl = $trackingUrl;
 
         return $this;
     }
@@ -184,6 +192,36 @@ class Purchase extends Audit
             // set the owning side to null (unless already changed)
             if ($item->getPurchase() === $this) {
                 $item->setPurchase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InboundEmail>
+     */
+    public function getInboundEmails(): Collection
+    {
+        return $this->inboundEmails;
+    }
+
+    public function addInboundEmail(InboundEmail $inboundEmail): static
+    {
+        if (!$this->inboundEmails->contains($inboundEmail)) {
+            $this->inboundEmails->add($inboundEmail);
+            $inboundEmail->setPurchase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInboundEmail(InboundEmail $inboundEmail): static
+    {
+        if ($this->inboundEmails->removeElement($inboundEmail)) {
+            // set the owning side to null (unless already changed)
+            if ($inboundEmail->getPurchase() === $this) {
+                $inboundEmail->setPurchase(null);
             }
         }
 

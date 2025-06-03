@@ -57,6 +57,7 @@
 
             <div class="col-12 col-lg-4">
                 <h3>Details</h3>
+                <p><b>Status</b>: {{ purchase.status|capitalize }}</p>
                 <p><b>Order date</b>: {{ purchase.orderDate ? purchase.orderDate|date('d-m-Y H:i:s') : '' }}</p>
                 <p>
                     <b>Tracking</b>:
@@ -72,7 +73,38 @@
                  </p>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-12 mt-4">
+                <h3>Emails</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Sender</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set sorted_emails = purchase.inboundEmails|sort((a, b) => b.dateReceived <=> a.dateReceived) %}
+                    {% for email in sorted_emails %}
+                        <tr>
+                            <td>{{ email.dateReceived ? email.dateReceived|date('d-m-Y H:i:s') : '' }}</td>
+                            <td>{{ email.subject }}</td>
+                            <td>{{ email.sender }}</td>
+                            <td>
+                                <a class="btn btn-primary" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No emails received</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12">
                 <div class="d-flex justify-content-between mb-4">
                     <a class="btn btn-primary" href="{{ path('app_purchase_index') }}">Back to orders</a>
                     <div>

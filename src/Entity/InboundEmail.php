@@ -10,10 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: InboundEmailRepository::class)]
 class InboundEmail extends Audit
 {
+    const STATUS_FAILED = 'FAILED';
+    const STATUS_NEW = 'NEW';
+    const STATUS_PROCESSED = 'PROCESSED';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'inboundEmails')]
+    private ?Purchase $purchase = null;
 
     #[ORM\Column]
     private ?DateTime $dateReceived = null;
@@ -39,6 +46,18 @@ class InboundEmail extends Audit
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getPurchase(): ?Purchase
+    {
+        return $this->purchase;
+    }
+
+    public function setPurchase(?Purchase $purchase): static
+    {
+        $this->purchase = $purchase;
+
+        return $this;
     }
 
     public function getDateReceived(): ?DateTime

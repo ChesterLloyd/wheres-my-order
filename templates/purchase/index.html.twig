@@ -18,6 +18,7 @@
                         <th>Store</th>
                         <th>Order date</th>
                         <th>Amount</th>
+                        <th>Status</th>
                         <th>Tracking</th>
                         <th>Actions</th>
                     </tr>
@@ -28,6 +29,7 @@
                             <td>{{ purchase.store.name }}</td>
                             <td>{{ purchase.orderDate ? purchase.orderDate|date('Y-m-d H:i:s') : '' }}</td>
                             <td>{{ purchase.amount }} {{ purchase.currency }}</td>
+                            <td>{{ purchase.status|capitalize }}</td>
                             <td>
                                 {% if purchase.trackingCourier %}
                                     {{ purchase.trackingCourier }}

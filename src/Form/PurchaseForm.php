@@ -27,7 +27,7 @@ class PurchaseForm extends AbstractType
                 'required' => true,
                 'label' => 'Order Number',
             ])
-            ->add('order_date', DateTimeType::class, [
+            ->add('orderDate', DateTimeType::class, [
                 'required' => true,
                 'label' => 'Order Date',
                 'html5' => true,
@@ -38,6 +38,7 @@ class PurchaseForm extends AbstractType
                 'choices' => [
                     'Acknowledged' => Purchase::STATUS_ACKNOWLEDGED,
                     'Dispatched' => Purchase::STATUS_DISPATCHED,
+                    'Out for delivery' => Purchase::STATUS_OUT_FOR_DELIVERY,
                     'Delivered' => Purchase::STATUS_DELIVERED,
                     'Cancelled' => Purchase::STATUS_CANCELLED,
                 ],
@@ -66,11 +67,11 @@ class PurchaseForm extends AbstractType
                 'label' => false,
             ])
 
-            ->add('tracking_courier', TextType::class, [
+            ->add('trackingCourier', TextType::class, [
                 'required' => false,
                 'label' => 'Courier',
             ])
-            ->add('tracking_url', UrlType::class, [
+            ->add('trackingUrl', UrlType::class, [
                 'required' => false,
                 'label' => 'URL',
             ])

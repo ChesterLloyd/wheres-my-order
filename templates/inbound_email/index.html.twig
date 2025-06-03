@@ -18,6 +18,7 @@
                         <th>Date</th>
                         <th>Subject</th>
                         <th>Sender</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -27,6 +28,7 @@
                             <td>{{ email.dateReceived ? email.dateReceived|date('d-m-Y H:i:s') : '' }}</td>
                             <td>{{ email.subject }}</td>
                             <td>{{ email.sender }}</td>
+                            <td>{{ email.status|capitalize }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
                             </td>

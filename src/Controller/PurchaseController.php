@@ -21,7 +21,7 @@ final class PurchaseController extends AbstractController
     {
         return $this->render('purchase/index.html.twig', [
             'active' => self::ACTIVE_PAGE,
-            'purchases' => $purchaseRepository->findAll(),
+            'purchases' => $purchaseRepository->findBy([], ['orderDate' => 'DESC']),
         ]);
     }
 
