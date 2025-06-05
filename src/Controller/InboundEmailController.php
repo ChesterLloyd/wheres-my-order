@@ -8,9 +8,11 @@ use App\Service\InboundMailerService;
 use App\Service\OpenAIService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/inbound-email')]
@@ -21,6 +23,8 @@ final class InboundEmailController extends AbstractController
     public function __construct(
         private readonly InboundMailerService $inboundMailerService,
         private readonly OpenAIService        $openAIService,
+        #[Autowire(env: 'MAIL_INBOUND_API_KEY')]
+        private readonly string               $inboundEmailToken,
     )
     {
     }
@@ -35,8 +39,19 @@ final class InboundEmailController extends AbstractController
     }
 
     #[Route('/receive', name: 'app_inbound_email_receive', methods: ['POST'])]
-    public function receive(Request $request): JsonResponse
+    public function receive(
+        Request $request,
+        #[MapQueryParameter] ?string $token,
+    ): JsonResponse
     {
+        // Validate the request token
+        if ($token !== $this->inboundEmailToken) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Invalid token'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
         $payload = json_decode($request->getContent(), true);
 
         // Validate the request content
