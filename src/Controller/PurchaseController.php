@@ -21,7 +21,7 @@ final class PurchaseController extends AbstractController
     {
         return $this->render('purchase/index.html.twig', [
             'active' => self::ACTIVE_PAGE,
-            'purchases' => $purchaseRepository->findBy([], ['orderDate' => 'DESC']),
+            'purchases' => $purchaseRepository->findBy(['user' => $this->getUser()], ['orderDate' => 'DESC']),
         ]);
     }
 
@@ -33,6 +33,7 @@ final class PurchaseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $purchase->setUser($this->getUser());
             $entityManager->persist($purchase);
             $entityManager->flush();
 
@@ -50,6 +51,10 @@ final class PurchaseController extends AbstractController
     #[Route('/{id}', name: 'app_purchase_show', methods: ['GET'])]
     public function show(Purchase $purchase): Response
     {
+        if ($purchase->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not have permission to view this order.');
+        }
+
         return $this->render('purchase/show.html.twig', [
             'active' => self::ACTIVE_PAGE,
             'purchase' => $purchase,
@@ -59,6 +64,10 @@ final class PurchaseController extends AbstractController
     #[Route('/{id}/edit', name: 'app_purchase_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Purchase $purchase, EntityManagerInterface $entityManager): Response
     {
+        if ($purchase->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not have permission to edit this order.');
+        }
+
         $form = $this->createForm(PurchaseForm::class, $purchase);
         $form->handleRequest($request);
 
@@ -79,6 +88,10 @@ final class PurchaseController extends AbstractController
     #[Route('/{id}', name: 'app_purchase_delete', methods: ['POST'])]
     public function delete(Request $request, Purchase $purchase, EntityManagerInterface $entityManager): Response
     {
+        if ($purchase->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not have permission to delete this order.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$purchase->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($purchase);
             $entityManager->flush();

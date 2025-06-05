@@ -34,7 +34,10 @@ final class InboundEmailController extends AbstractController
     {
         return $this->render('inbound_email/index.html.twig', [
             'active' => self::ACTIVE_PAGE,
-            'inbound_emails' => $inboundEmailRepository->findBy([], ['dateReceived' => 'DESC']),
+            'inbound_emails' => $inboundEmailRepository->findBy(
+                ['recipient' => $this->getUser()->getInboundEmail()],
+                ['dateReceived' => 'DESC']
+            ),
         ]);
     }
 
@@ -88,6 +91,10 @@ final class InboundEmailController extends AbstractController
     #[Route('/{id}', name: 'app_inbound_email_show', methods: ['GET'])]
     public function show(InboundEmail $inboundEmail): Response
     {
+        if ($inboundEmail->getRecipient() != $this->getUser()->getInboundEmail()) {
+            throw $this->createAccessDeniedException('You do not have permission to edit this email.');
+        }
+
         return $this->render('inbound_email/show.html.twig', [
             'active' => self::ACTIVE_PAGE,
             'inbound_email' => $inboundEmail,
@@ -97,6 +104,10 @@ final class InboundEmailController extends AbstractController
     #[Route('/{id}', name: 'app_inbound_email_delete', methods: ['POST'])]
     public function delete(Request $request, InboundEmail $inboundEmail, EntityManagerInterface $entityManager): Response
     {
+        if ($inboundEmail->getRecipient() != $this->getUser()->getInboundEmail()) {
+            throw $this->createAccessDeniedException('You do not have permission to delete this email.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$inboundEmail->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($inboundEmail);
             $entityManager->flush();

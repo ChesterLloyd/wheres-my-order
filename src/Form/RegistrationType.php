@@ -22,8 +22,8 @@ class RegistrationType extends AbstractType
                 'required' => true,
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Last name (optional)',
-                'required' => false,
+                'label' => 'Last name',
+                'required' => true,
             ])
             ->add('email', EmailType::class, [
                 'constraints' => [

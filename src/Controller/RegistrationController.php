@@ -16,6 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct(
+        private readonly InboundMailerService $inboundMailerService,
+    )
+    {
+    }
+
     #[Route('/registration', name: 'app_registration')]
     public function index(
         Request $request,
@@ -40,7 +46,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setInboundEmail(InboundMailerService::generateInboundEmailAddress());
+            $user->setInboundEmail($this->inboundMailerService->generateInboundEmailAddress());
             $entityManager->persist($user);
             $entityManager->flush();
 

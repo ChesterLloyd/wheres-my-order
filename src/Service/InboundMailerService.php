@@ -6,6 +6,7 @@ use App\Entity\InboundEmail;
 use App\Entity\Item;
 use App\Entity\Purchase;
 use App\Entity\Store;
+use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -112,12 +113,24 @@ readonly class InboundMailerService
 
         // Create a new purchase
         if ($purchaseJson['status'] === Purchase::STATUS_ACKNOWLEDGED) {
+            $user = $this->entityManager->getRepository(User::class)->findOneBy([
+                'inboundEmail' => $inboundEmail->getRecipient(),
+            ]);
+            if (!$user) {
+                $this->logger->error(sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId()));
+                return [
+                    'status' => 'error',
+                    'message' => 'User not found for the provided inbound email address.',
+                ];
+            }
+
             $store = new Store();
             $store->setName($purchaseJson['store_name'] ?: 'Unknown')
                 ->setWebsite($purchaseJson['store_website']);
 
             $purchase = new Purchase();
-            $purchase->setStore($store)
+            $purchase->setUser($user)
+                ->setStore($store)
                 ->setOrderId($purchaseJson['order_id'])
                 ->setStatus($purchaseJson['status'])
                 ->setOrderDate(new DateTime($purchaseJson['purchase_date']))

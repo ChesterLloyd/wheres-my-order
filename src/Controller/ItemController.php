@@ -18,6 +18,10 @@ final class ItemController extends AbstractController
     #[Route('/{id}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
+        if ($item->getPurchase()->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not have permission to edit this item.');
+        }
+
         $form = $this->createForm(ItemForm::class, $item);
         $form->handleRequest($request);
 
@@ -37,6 +41,10 @@ final class ItemController extends AbstractController
     #[Route('/{id}', name: 'app_item_delete', methods: ['POST'])]
     public function delete(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
+        if ($item->getPurchase()->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not have permission to delete this item.');
+        }
+
         $purchaseId = $item->getPurchase()->getId();
         if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($item);
