@@ -10,11 +10,9 @@
         </div>
 
         <div class="row">
-            {% for item in list %}
-                {# todo: render the item row #}
-            {% else %}
-                <p class="list-container__no-results">No orders to display</p>
-            {% endfor %}
+            <div class="col-12">
+                {% include 'components/_table-purchases.html.twig' with { purchases: list } %}
+            </div>
         </div>
 
         <div class="row">
