@@ -111,23 +111,24 @@ readonly class InboundMailerService
         $this->logger->info(sprintf('Received email (inboundEmailId: %s)', $inboundEmail->getId()));
         $this->logger->debug(sprintf('Purchase JSON: %s', json_encode($purchaseJson)));
 
+        // Find the user for this inbound email
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'inboundEmail' => $inboundEmail->getRecipient(),
+        ]);
+        if (!$user) {
+            $inboundEmail->setStatus(InboundEmail::STATUS_FAILED)
+                ->setStatusMessage(
+                    sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId())
+                );
+            $this->logger->error($inboundEmail->getStatusMessage());
+            return [
+                'status' => 'error',
+                'message' => $inboundEmail->getStatusMessage(),
+            ];
+        }
+
         // Create a new purchase
         if ($purchaseJson['status'] === Purchase::STATUS_ACKNOWLEDGED) {
-            $user = $this->entityManager->getRepository(User::class)->findOneBy([
-                'inboundEmail' => $inboundEmail->getRecipient(),
-            ]);
-            if (!$user) {
-                $inboundEmail->setStatus(InboundEmail::STATUS_FAILED)
-                    ->setStatusMessage(
-                        sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId())
-                    );
-                $this->logger->error($inboundEmail->getStatusMessage());
-                return [
-                    'status' => 'error',
-                    'message' => $inboundEmail->getStatusMessage(),
-                ];
-            }
-
             $store = new Store();
             $store->setName($purchaseJson['store_name'] ?: 'Unknown')
                 ->setWebsite($purchaseJson['store_website']);
@@ -167,6 +168,7 @@ readonly class InboundMailerService
         } else {
             // Only update the status and link the email
             $purchase = $this->entityManager->getRepository(Purchase::class)->findOneBy([
+                'user' => $user,
                 'orderId' => $purchaseJson['order_id'],
             ]);
             if ($purchase) {
