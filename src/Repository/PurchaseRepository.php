@@ -37,25 +37,4 @@ class PurchaseRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
-    /**
-     * @return Purchase[] Returns an array of purchases that have
-     * completed for a specific user.
-     */
-    public function findRecentCompletedPurchasesByUserId(int $userId): array
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.status IN (:statuses)')
-            ->andWhere('p.user = :user')
-            ->setParameter('statuses', [
-                Purchase::STATUS_CANCELLED,
-                Purchase::STATUS_DELIVERED,
-            ])
-            ->setParameter('user', $userId)
-            ->orderBy('p.orderDate', 'DESC')
-            ->setMaxResults(3)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 }

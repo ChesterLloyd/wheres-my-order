@@ -15,13 +15,10 @@ class DashboardController extends AbstractController
     {
         $ongoingOrders = $entityManager->getRepository(Purchase::class)
             ->findRecentOngoingPurchasesByUserId($this->getUser()->getId());
-        $previousOrders = $entityManager->getRepository(Purchase::class)
-            ->findRecentCompletedPurchasesByUserId($this->getUser()->getId());
 
         return $this->render('dashboard/index.html.twig', [
             'active' => 'dashboard',
             'ongoingOrders' => $ongoingOrders,
-            'previousOrders' => $previousOrders,
         ]);
     }
 }
