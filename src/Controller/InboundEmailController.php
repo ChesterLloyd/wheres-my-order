@@ -21,10 +21,11 @@ final class InboundEmailController extends AbstractController
     const ACTIVE_PAGE = 'inbound_email';
 
     public function __construct(
-        private readonly InboundMailerService $inboundMailerService,
-        private readonly OpenAIService        $openAIService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly InboundMailerService   $inboundMailerService,
+        private readonly OpenAIService          $openAIService,
         #[Autowire(env: 'MAIL_INBOUND_API_KEY')]
-        private readonly string               $inboundEmailToken,
+        private readonly string                 $inboundEmailToken,
     )
     {
     }
@@ -71,6 +72,9 @@ final class InboundEmailController extends AbstractController
         // Call OpenAI to extract purchase JSON from the email body
         $aiResponse = $this->openAIService->extractPurchaseJsonFromEmail($inboundEmail->getHtmlBody());
         if (isset($purchaseJson['error'])) {
+            $inboundEmail->setStatus(InboundEmail::STATUS_FAILED)
+                ->setStatusMessage($purchaseJson['error']);
+            $this->entityManager->flush();
             return new JsonResponse($purchaseJson, Response::HTTP_BAD_REQUEST);
         } else {
             // Check if the AI response contains the expected JSON format
@@ -80,9 +84,12 @@ final class InboundEmailController extends AbstractController
                 return new JsonResponse($upsertResponse, $upsertResponse ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
 
             } else {
+                $inboundEmail->setStatus(InboundEmail::STATUS_FAILED)
+                    ->setStatusMessage('Invalid AI response format');
+                $this->entityManager->flush();
                 return new JsonResponse([
                     'status' => 'error',
-                    'message' => 'Invalid AI response format'
+                    'message' => $inboundEmail->getStatusMessage(),
                 ], Response::HTTP_BAD_REQUEST);
             }
         }

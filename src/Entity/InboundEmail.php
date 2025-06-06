@@ -43,6 +43,9 @@ class InboundEmail extends Audit
     #[ORM\Column(length: 10)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statusMessage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,6 +143,18 @@ class InboundEmail extends Audit
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatusMessage(): ?string
+    {
+        return $this->statusMessage;
+    }
+
+    public function setStatusMessage(?string $statusMessage): static
+    {
+        $this->statusMessage = $statusMessage;
 
         return $this;
     }

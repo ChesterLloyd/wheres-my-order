@@ -117,10 +117,14 @@ readonly class InboundMailerService
                 'inboundEmail' => $inboundEmail->getRecipient(),
             ]);
             if (!$user) {
-                $this->logger->error(sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId()));
+                $inboundEmail->setStatus(InboundEmail::STATUS_FAILED)
+                    ->setStatusMessage(
+                        sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId())
+                    );
+                $this->logger->error($inboundEmail->getStatusMessage());
                 return [
                     'status' => 'error',
-                    'message' => 'User not found for the provided inbound email address.',
+                    'message' => $inboundEmail->getStatusMessage(),
                 ];
             }
 
@@ -177,12 +181,13 @@ readonly class InboundMailerService
                 ];
             } else {
                 $inboundEmail->setPurchase($purchase)
-                    ->setStatus(InboundEmail::STATUS_FAILED);
+                    ->setStatus(InboundEmail::STATUS_FAILED)
+                    ->setStatusMessage(sprintf('Failed to find the purchase (orderId: %s)', $purchaseJson['order_id']));
                 $this->entityManager->flush();
 
                 return [
                     'status' => 'error',
-                    'message' => sprintf('Failed to find the purchase (orderId: %s)', $purchaseJson['order_id']),
+                    'message' => $inboundEmail->getStatusMessage(),
                 ];
             }
         }
