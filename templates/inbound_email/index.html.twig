@@ -11,7 +11,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 overflow-x-scroll">
                 <table class="table">
                     <thead>
                     <tr>
@@ -30,11 +30,11 @@
                             <td>{{ email.sender }}</td>
                             <td>{{ email.status|capitalize }}</td>
                             <td>
-                                <a class="btn btn-success ajax-button"
+                                <a class="btn btn-success ajax-button mb-1"
                                    href="{{ path('app_inbound_email_forward', {'id': email.id}) }}"
                                    data-spinner-text="Sending"
                                 >Forward to me</a>
-                                <a class="btn btn-primary" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
+                                <a class="btn btn-primary mb-1" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
                             </td>
                         </tr>
                     {% else %}

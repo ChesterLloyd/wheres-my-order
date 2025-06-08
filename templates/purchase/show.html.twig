@@ -27,7 +27,7 @@
                         <th>Name</th>
                         <th>Amount</th>
                         <th>Quantity</th>
-                        <th>Actions</th>
+                        <th width="170px">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,7 +42,7 @@
                             <td>{{ item.amount }} {{ item.currency }}</td>
                             <td>{{ item.quantity }}</td>
                             <td>
-                                <a class="btn btn-warning" href="{{ path('app_item_edit', {'id': item.id}) }}">Edit</a>
+                                <a class="btn btn-warning mb-1" href="{{ path('app_item_edit', {'id': item.id}) }}">Edit</a>
                                 {{ include('item/_delete_form.html.twig') }}
                             </td>
                         </tr>
@@ -55,7 +55,7 @@
                 </table>
             </div>
 
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-4 mt-3 mt-lg-0">
                 <h3>Details</h3>
                 <p><b>Status</b>: {{ purchase.status|capitalize }}</p>
                 <p><b>Order date</b>: {{ purchase.orderDate ? purchase.orderDate|date('d-m-Y H:i:s') : '' }}</p>
@@ -73,7 +73,7 @@
                  </p>
             </div>
 
-            <div class="col-12 mt-4">
+            <div class="col-12 overflow-x-scroll mt-4">
                 <h3>Emails</h3>
                 <table class="table">
                     <thead>
