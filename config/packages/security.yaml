@@ -41,7 +41,7 @@ security:
         - { path: ^/item, roles: ROLE_USER }
         - { path: ^/inbound-email/receive, roles: PUBLIC_ACCESS }
         - { path: ^/inbound-email, roles: ROLE_USER }
-#        - { path: ^/settings, roles: ROLE_USER }
+        - { path: ^/settings, roles: ROLE_USER }
 
 when@test:
     security:

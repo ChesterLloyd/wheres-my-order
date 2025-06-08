@@ -33,7 +33,7 @@
                             {{ app.user.name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ "path('account_settings')" }}">Settings</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_settings') }}">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                         </ul>

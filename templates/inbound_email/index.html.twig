@@ -30,6 +30,10 @@
                             <td>{{ email.sender }}</td>
                             <td>{{ email.status|capitalize }}</td>
                             <td>
+                                <a class="btn btn-success ajax-button"
+                                   href="{{ path('app_inbound_email_forward', {'id': email.id}) }}"
+                                   data-spinner-text="Sending"
+                                >Forward to me</a>
                                 <a class="btn btn-primary" href="{{ path('app_inbound_email_show', {'id': email.id}) }}">View</a>
                             </td>
                         </tr>

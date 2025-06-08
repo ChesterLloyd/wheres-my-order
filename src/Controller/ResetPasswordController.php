@@ -65,6 +65,7 @@ class ResetPasswordController extends AbstractController
                     'user' => $user,
                     'resetToken' => $resetToken,
                 ]),
+                '',
                 MailerService::$STREAM_RESET_PASSWORD
             );
 

@@ -22,6 +22,7 @@ readonly class InboundMailerService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private LoggerInterface        $logger,
+        private MailerService          $mailerService,
         #[Autowire(env: 'MAIL_INBOUND_DOMAIN')]
         private string                 $inboundEmailDomain,
     )
@@ -96,6 +97,44 @@ readonly class InboundMailerService
         $this->entityManager->flush();
 
         return $inboundEmail;
+    }
+
+    /**
+     * Forward an InboundEmail to the user's account email
+     * if they have opted in to forward emails.
+     *
+     * @param InboundEmail $inboundEmail
+     * @return bool
+     */
+    public function forwardInboundEmail(InboundEmail $inboundEmail): bool
+    {
+        $this->logger->info(sprintf('Forwarding inbound email (inboundEmailId: %s)', $inboundEmail->getId()));
+
+        // Find the user for this inbound email
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'inboundEmail' => $inboundEmail->getRecipient(),
+        ]);
+        if (!$user) {
+            $this->logger->error(
+                sprintf('User not found for inbound email (inboundEmailId: %s)', $inboundEmail->getId())
+            );
+            return false;
+        }
+
+        if ($user->isForwardEmails()) {
+            $this->logger->info(sprintf('Forwarding email to user (userId: %s)', $user->getId()));
+
+            // Forward the email to the user's email address
+            $to = $user->getEmail();
+            $subject = $inboundEmail->getSubject();
+            $htmlBody = $inboundEmail->getHtmlBody();
+            $textBody = $inboundEmail->getTextBody();
+
+            return $this->mailerService->sendEmail($to, $subject, $htmlBody, $textBody, MailerService::$STREAM_FORWARD_EMAIL);
+        } else {
+            $this->logger->info(sprintf('User opted out of forwarding emails (userId: %s)', $user->getId()));
+            return false;
+        }
     }
 
     /**

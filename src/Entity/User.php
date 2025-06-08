@@ -23,7 +23,7 @@ class User extends Audit implements UserInterface, PasswordAuthenticatedUserInte
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -31,6 +31,9 @@ class User extends Audit implements UserInterface, PasswordAuthenticatedUserInte
 
     #[ORM\Column(length: 255)]
     private ?string $inboundEmail = null;
+
+    #[ORM\Column]
+    private ?bool $forwardEmails = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -111,6 +114,18 @@ class User extends Audit implements UserInterface, PasswordAuthenticatedUserInte
     public function setInboundEmail(string $inboundEmail): static
     {
         $this->inboundEmail = $inboundEmail;
+
+        return $this;
+    }
+
+    public function isForwardEmails(): ?bool
+    {
+        return $this->forwardEmails;
+    }
+
+    public function setForwardEmails(bool $forwardEmails): static
+    {
+        $this->forwardEmails = $forwardEmails;
 
         return $this;
     }

@@ -49,7 +49,13 @@
 
     <div class="d-flex justify-content-between mb-4">
         <a class="btn btn-primary" href="{{ path('app_inbound_email_index') }}">Back to emails</a>
-        {{ include('inbound_email/_delete_form.html.twig') }}
+        <div>
+            {{ include('inbound_email/_delete_form.html.twig') }}
+            <a class="btn btn-success ajax-button"
+               href="{{ path('app_inbound_email_forward', {'id': inbound_email.id}) }}"
+               data-spinner-text="Sending"
+            >Forward to me</a>
+        </div>
     </div>
 </div>
 {% endblock %}

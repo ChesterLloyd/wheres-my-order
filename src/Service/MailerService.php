@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class MailerService
 {
     private string $mailToken;
+    static string $STREAM_FORWARD_EMAIL = 'forward-email';
     static string $STREAM_RESET_PASSWORD = 'password-reset';
     static string $ERROR_GENERIC = 'An error occurred whilst sending the email. Please try again or use an alternative method.';
 
@@ -29,10 +30,11 @@ class MailerService
      * @param string $recipient
      * @param string $subject
      * @param string $body
+     * @param string|null $textBody
      * @param string $stream
      * @return bool
      */
-    public function sendEmail(string $recipient, string $subject, string $body, string $stream): bool
+    public function sendEmail(string $recipient, string $subject, string $body, ?string $textBody, string $stream): bool
     {
         $client = new PostmarkClient($this->mailToken);
 
@@ -42,7 +44,7 @@ class MailerService
                 $recipient,
                 $subject,
                 $body,
-                '',
+                $textBody,
                 null,
                 false,
                 null,

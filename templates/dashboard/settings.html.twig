@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('hero') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/_hero.html.twig' with { title: 'Account settings' } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% include 'components/_flashes.html.twig' %}
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-12 col-lg-5">
+                    <h2 class="h4 mb-3">General settings</h2>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            {{ form_row(form.firstName) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.lastName) }}
+                        </div>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        {{ form_row(form.email) }}
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6 offset-lg-1">
+                    <h2 class="h4 mt-3 mt-lg-0 mb-3">Email settings</h2>
+
+                    <p>
+                        If you'd like to receive any emails that are sent to your custom address,
+                        you can enable the option below. This will automatically forward them on to your
+                        account's email address.
+                    </p>
+                    <p>This is useful whilst testing out the system.</p>
+
+                    <table class="table border-top">
+                        <tbody>
+                        <tr>
+                            <th>Inbound email</th>
+                            <td>{{ app.user.inboundEmail }}</td>
+                        </tr>
+                        <tr>
+                            <th>Forward to</th>
+                            <td>{{ app.user.email }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-outline mb-4">
+                        {{ form_row(form.forwardEmails) }}
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <div class="d-flex justify-content-between mb-4">
+                        <a class="btn btn-primary" href="{{ path('app_dashboard') }}">Back to dashboard</a>
+                        {{ form_widget(form.save) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

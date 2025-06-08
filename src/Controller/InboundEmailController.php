@@ -68,6 +68,7 @@ final class InboundEmailController extends AbstractController
         }
 
         $inboundEmail = $this->inboundMailerService->createInboundEmailFromPayload($payload);
+        $this->inboundMailerService->forwardInboundEmail($inboundEmail);
 
         // Call OpenAI to extract purchase JSON from the email body
         $aiResponse = $this->openAIService->extractPurchaseJsonFromEmail($inboundEmail->getHtmlBody());
@@ -121,5 +122,19 @@ final class InboundEmailController extends AbstractController
         }
 
         return $this->redirectToRoute('app_inbound_email_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/forward', name: 'app_inbound_email_forward', methods: ['POST'])]
+    public function forwardEmail(InboundEmail $inboundEmail, InboundMailerService $inboundMailerService): JsonResponse
+    {
+        if ($inboundEmail->getRecipient() != $this->getUser()->getInboundEmail()) {
+            throw $this->createAccessDeniedException('You do not have permission to forward this email.');
+        }
+
+        $success = $inboundMailerService->forwardInboundEmail($inboundEmail);
+        return new JsonResponse([
+            'success' => $success,
+            'text' => $success ? 'Forwarded' : 'Failed',
+        ], Response::HTTP_OK);
     }
 }
